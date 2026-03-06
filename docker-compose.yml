@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  backend:
+    image: "ghcr.io/aapelix/yt-api:latest"
+    restart: unless-stopped
+
+  frontend:
+    image: "ghcr.io/aapelix/yt-app:latest"
+    restart: unless-stopped
+    environment:
+      - VITE_API_URL=https://yt-api.aapelix.dev
+    depends_on:
+      - backend
