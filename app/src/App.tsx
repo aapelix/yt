@@ -91,7 +91,7 @@ export function App() {
           downloadFile(`${URL}/file?id=${jobId}`);
           setJobId(null);
           setInput("");
-        } else if (data.Status === "error") {
+        } else if (data.Status === "error" || data.Status === "failed") {
           clearInterval(interval);
           setError(data.Error);
           setJobId(null);
