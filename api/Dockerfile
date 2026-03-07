@@ -1,13 +1,14 @@
-FROM golang:latest AS builder
+FROM golang:1.21-alpine AS builder
 WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN go build -o yt-api .
 
-FROM debian:bullseye-slim
+RUN CGO_ENABLED=0 GOOS=linux go build -o yt-api .
+
+FROM alpine:latest
 WORKDIR /root/
 COPY --from=builder /app/yt-api .
-RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
+RUN apk --no-cache add ca-certificates
 EXPOSE 8080
 CMD ["./yt-api"]
