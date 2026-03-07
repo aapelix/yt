@@ -1,14 +1,13 @@
-FROM python:3.12-slim
-
+FROM golang:latest AS builder
 WORKDIR /app
-
-RUN pip install uv
-
-COPY pyproject.toml uv.lock ./
-RUN uv sync --frozen
-
+COPY go.mod go.sum ./
+RUN go mod download
 COPY . .
+RUN go build -o yt-api .
 
-EXPOSE 8000
-
-CMD ["uv", "run", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+FROM alpine:latest
+RUN apk --no-cache add ca-certificates
+WORKDIR /root/
+COPY --from=builder /app/yt-api .
+EXPOSE 8080
+CMD ["./yt-api"]

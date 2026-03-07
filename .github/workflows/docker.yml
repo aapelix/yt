@@ -21,8 +21,3 @@ jobs:
         run: |
           docker build -t ghcr.io/${{ github.repository }}-api:latest ./api
           docker push ghcr.io/${{ github.repository }}-api:latest
-
-      - name: Build & Push App
-        run: |
-          docker build -t ghcr.io/${{ github.repository }}-app:latest ./app
-          docker push ghcr.io/${{ github.repository }}-app:latest
